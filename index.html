@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A social community demo to share ideas and connect with creators.">
+    <title>SiddVerse — Connect. Share. Discover.</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <section class="auth-page" id="authPage">
+        <div class="auth-shell">
+            <div class="auth-hero">
+                <div class="brand-badge">SiddVerse</div>
+                <h1>Build your digital circle.</h1>
+                <p>
+                    Share ideas, discover creators, and stay connected with your community in a more vibrant social
+                    space.
+                </p>
+
+                <div class="hero-stats">
+                    <div>
+                        <strong>Share</strong>
+                        <span>Post ideas and updates</span>
+                    </div>
+                    <div>
+                        <strong>Connect</strong>
+                        <span>Follow your community</span>
+                    </div>
+                    <div>
+                        <strong>Discover</strong>
+                        <span>Find posts and people</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="auth-box">
+                <div class="logo">
+                    <h1>SiddVerse</h1>
+                    <p>Connect. Share. Discover.</p>
+                </div>
+
+                <div id="loginForm">
+                    <h2>Welcome Back 👋</h2>
+                    <label class="sr-only" for="loginUsername">Username</label>
+                    <input type="text" id="loginUsername" placeholder="Username" autocomplete="username">
+                    <label class="sr-only" for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+                    <button class="primary-btn" onclick="login()">Login</button>
+                    <div class="switch-auth">
+                        Don't have an account?
+                        <button class="text-btn" type="button" onclick="showRegister()">Create Account</button>
+                    </div>
+                </div>
+
+                <div id="registerForm" style="display:none;">
+                    <h2>Create Account 🚀</h2>
+                    <label class="sr-only" for="registerName">Full Name</label>
+                    <input type="text" id="registerName" placeholder="Full Name" autocomplete="name">
+                    <label class="sr-only" for="registerUsername">Username</label>
+                    <input type="text" id="registerUsername" placeholder="Username" autocomplete="username">
+                    <label class="sr-only" for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" placeholder="Password" autocomplete="new-password">
+                    <button class="primary-btn" onclick="register()">Register</button>
+                    <div class="switch-auth">
+                        Already have an account?
+                        <button class="text-btn" type="button" onclick="showLogin()">Login</button>
+                    </div>
+                </div>
+                <p class="auth-note">Demo login: <strong>siddhant</strong> / <strong>1234</strong>. Run <code>npm start</code> and open <code>http://127.0.0.1:3000</code>; opening this file directly will not connect to SQLite. Demo only—don't use a real password.</p>
+            </div>
+        </div>
+    </section>
+
+    <div id="app">
+        <nav class="navbar">
+            <div class="nav-inner">
+                <button class="nav-logo" type="button" aria-label="Go to home" onclick="showHome()">SiddVerse</button>
+
+                <div class="search-box">
+                    <label class="sr-only" for="searchInput">Search posts, people, or topics</label>
+                    <input type="search" id="searchInput" placeholder="🔍 Search posts, people, or topics"
+                        oninput="searchContent()">
+                </div>
+
+                <div class="nav-actions">
+                    <button class="icon-btn" type="button" onclick="toggleDarkMode()" title="Toggle dark mode" aria-label="Toggle dark mode" aria-pressed="false">🌙</button>
+                    <button class="icon-btn notification-button" type="button" onclick="showNotifications()" title="Notifications" aria-label="Show notifications">
+                        🔔<span class="notification-badge" id="notificationBadge" aria-hidden="true" hidden></span>
+                    </button>
+                    <button class="profile-mini" type="button" onclick="showProfile()" aria-label="Open your profile">
+                        <span class="avatar" id="navAvatar">D</span>
+                        <span id="navUsername">User</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="main-container">
+            <aside class="sidebar">
+                <nav class="sidebar-card" aria-label="Main navigation">
+                    <button class="side-item active" type="button" data-page="home" aria-current="page" onclick="showHome()">🏠 Home</button>
+                    <button class="side-item" type="button" data-page="profile" onclick="showProfile()">👤 Profile</button>
+                    <button class="side-item" type="button" data-page="notifications" onclick="showNotifications()">🔔 Notifications</button>
+                    <button class="side-item" type="button" onclick="focusCreatePost()">➕ Create Post</button>
+                    <button class="side-item" type="button" onclick="logout()">🚪 Logout</button>
+                </nav>
+
+                <div class="mini-panel">
+                    <p class="panel-label">Quick stats</p>
+                    <div class="mini-stat">
+                        <span>Posts</span>
+                        <strong id="sidePostCount">0</strong>
+                    </div>
+                    <div class="mini-stat">
+                        <span>Followers</span>
+                        <strong id="sideFollowerCount">0</strong>
+                    </div>
+                    <div class="mini-stat">
+                        <span>Following</span>
+                        <strong id="sideFollowingCount">0</strong>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="main-feed">
+                <section id="homePage">
+                    <div class="story-strip">
+                        <div class="story-card active">
+                            <div class="story-avatar">S</div>
+                            <span>Stories</span>
+                        </div>
+                        <div class="story-card">
+                            <div class="story-avatar alt">P</div>
+                            <span>Photo</span>
+                        </div>
+                        <div class="story-card">
+                            <div class="story-avatar alt-two">T</div>
+                            <span>Tech</span>
+                        </div>
+                        <div class="story-card">
+                            <div class="story-avatar alt-three">C</div>
+                            <span>Campus</span>
+                        </div>
+                    </div>
+
+                    <div class="stats-bar">
+                        <div class="stat-card">
+                            <span>Posts</span>
+                            <strong id="statPosts">0</strong>
+                        </div>
+                        <div class="stat-card">
+                            <span>Followers</span>
+                            <strong id="statFollowers">0</strong>
+                        </div>
+                        <div class="stat-card">
+                            <span>Following</span>
+                            <strong id="statFollowing">0</strong>
+                        </div>
+                        <div class="stat-card">
+                            <span>Saved</span>
+                            <strong id="statSaved">0</strong>
+                        </div>
+                    </div>
+
+                    <div class="create-card" id="createCard">
+                        <div class="create-top">
+                            <div class="avatar" id="createAvatar">D</div>
+                            <label class="sr-only" for="postText">Write a post</label>
+                            <textarea id="postText" placeholder="What's happening on SiddVerse?"></textarea>
+                        </div>
+                        <div class="create-bottom">
+                            <label class="sr-only" for="imageURL">Optional image URL</label>
+                            <input class="image-url" id="imageURL" type="url" placeholder="Optional image URL">
+                            <button class="post-btn" onclick="createPost()">🚀 Post</button>
+                        </div>
+                    </div>
+
+                    <div class="feed-toolbar">
+                        <button class="filter-btn active" type="button" aria-pressed="true" data-filter="latest">Latest</button>
+                        <button class="filter-btn" type="button" aria-pressed="false" data-filter="trending">Trending</button>
+                        <button class="filter-btn" type="button" aria-pressed="false" data-filter="following">Following</button>
+                        <button class="filter-btn" type="button" aria-pressed="false" data-filter="saved">Saved</button>
+                    </div>
+
+                    <div id="feed" aria-live="polite"></div>
+                </section>
+
+                <section class="profile-page" id="profilePage">
+                    <div class="profile-card">
+                        <div class="cover" id="profileCover"></div>
+                        <div class="profile-info">
+                            <div class="profile-avatar" id="profileAvatar">D</div>
+                            <h2 id="profileName">Darshan</h2>
+                            <p id="profileUsername">@username</p>
+                            <p id="profileBio" style="margin-top:10px;">Welcome to my SiddVerse profile!</p>
+
+                            <div class="profile-stats">
+                                <div>
+                                    <strong id="postCount">0</strong>
+                                    Posts
+                                </div>
+                                <div>
+                                    <strong id="followerCount">0</strong>
+                                    Followers
+                                </div>
+                                <div>
+                                    <strong id="followingCount">0</strong>
+                                    Following
+                                </div>
+                            </div>
+
+                            <button class="edit-btn" onclick="openEditProfile()">✏️ Edit Profile</button>
+                        </div>
+                    </div>
+
+                    <div id="profilePosts"></div>
+                </section>
+
+                <section class="notifications-page" id="notificationsPage" aria-labelledby="notificationsHeading">
+                    <div class="notifications-header">
+                        <div>
+                            <h2 id="notificationsHeading">Notifications</h2>
+                            <p>Updates from people in your community.</p>
+                        </div>
+                        <button class="mark-read-btn" type="button" onclick="markAllNotificationsRead()">Mark all as read</button>
+                    </div>
+                    <div id="notificationList" aria-live="polite"></div>
+                </section>
+            </main>
+
+            <aside class="right-sidebar">
+                <div class="right-card">
+                    <h3>📈 Community pulse</h3>
+                    <div class="trend-list" id="trendingTopics"></div>
+                </div>
+
+                <div class="right-card">
+                    <h3>👥 People you may know</h3>
+                    <div id="suggestions"></div>
+                </div>
+
+                <div class="right-card">
+                    <h3>✨ Daily insight</h3>
+                    <p class="insight-text">Share a post and follow people to start building your network.</p>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <div class="modal" id="editModal">
+        <div class="modal-box">
+            <h2>Edit Profile</h2>
+            <label class="sr-only" for="editName">Your name</label>
+            <input type="text" id="editName" placeholder="Your name">
+            <label class="sr-only" for="editBio">Your bio</label>
+            <input type="text" id="editBio" placeholder="Your bio">
+            <label class="sr-only" for="editAvatar">Avatar image URL</label>
+            <input type="url" id="editAvatar" placeholder="Avatar image URL">
+            <label class="sr-only" for="editCover">Cover background URL</label>
+            <input type="url" id="editCover" placeholder="Cover background URL">
+
+            <div class="modal-actions">
+                <button class="cancel-btn" onclick="closeEditProfile()">Cancel</button>
+                <button class="post-btn" onclick="saveProfile()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
